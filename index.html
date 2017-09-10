@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="origin-trial">
+<title>FlySouth</title>
+<script src="node_modules/aframe/dist/aframe-master.js"></script>
+<body class="a-body ">
+<a-scene class="fullscreen" canvas keyboard-shortcuts vr-mode-ui>
+    <a-assets>
+    </a-assets>
+
+    <a-entity id="world">
+
+    </a-entity>
+
+    <a-entity id="camera" position="0 3 5" look-controls-enabled>
+        <a-camera far="10000"></a-camera>
+    </a-entity>
+
+    <a-plane id="street" geometry="primitive: plane;" material="color:#333;"></a-plane>
+
+    <a-plane color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0" material=""></a-plane>
+    <a-sky material="shader: flat; color: #87CEFA;" geometry="primitive: sphere; radius: 5000; segmentsHeight: 20; segmentsWidth: 64"></a-sky>
+    <a-light type="directional" color="#fff" intensity="0.2" position="-1 2 1" light=""></a-light>
+    <a-light type="ambient" color="#fff" light=""></a-light>
+</a-scene>
+<script>
+'use strict';
+var world = document.getElementById("world");
+
+function createStreet([x1,y1], [x2,y2], width = 5) {
+    const value_street = document.getElementById("street");
+    const newstreet = value_street.cloneNode(true);
+    const deltaX = x2 - x1;
+    const deltaY = y2 - y1;
+    const avrX = x1 + deltaX / 2;
+    const avrY = y1 + deltaY / 2;
+    const length = Math.hypot(deltaX, deltaY);
+    console.log(length);
+    newstreet.setAttribute('height', length);
+    newstreet.setAttribute('width', width);
+    newstreet.setAttribute('position', {x:avrX, y:0.3, z:avrY});
+    const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+    newstreet.setAttribute('rotation', {x:270, y:0, z:angle+90});
+    return newstreet;
+}
+
+const addStreet=street=>world.appendChild(street);
+
+
+for(let i = 0; i < 10; i++) {
+    // Main roads
+    addStreet(createStreet([i * 100, 0], [i * 100,1000]));
+    addStreet(createStreet([0, i * 100], [1000,i * 100]));
+    addStreet(createStreet([i * 100+50, 0], [i * 100+50, 0], 4));
+}
+
+addStreet(createStreet([0,0], [40,0]));
+addStreet(createStreet([20,0], [20,20]));
+addStreet(createStreet([20,20], [0,20]));
+addStreet(createStreet([0,20], [0,0]));
+
+addStreet(createStreet([20,10], [0,0], 1));
+addStreet(createStreet([0,0], [20,20], 2));
+
+</script>
+</body></html>
