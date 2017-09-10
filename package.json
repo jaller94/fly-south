@@ -1,13 +1,14 @@
 {
-  "name": "goose-vr",
-  "version": "1.0.0",
+  "name": "fly-south",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
+    "start": "python -m SimpleHTTPServer 3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Christian Paul",
+  "license": "MIT",
   "dependencies": {
     "aframe": "^0.6.1"
   }
