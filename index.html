@@ -106,7 +106,7 @@ let targetPosition = {x: 0, y: 0.3, z:0};
 setCamera(lastPosition);
 
 function angleWithinRange(actual, expected, variation) {
-    if (actual - variation > expected && actual - variation < expected) {
+    if (actual > expected - variation && actual < expected + variation) {
         return true;
     }
     //TODO Wrap around 360° to 0° and 0° to 360°
@@ -117,7 +117,6 @@ function nextStageChecker(timestamp) {
     switch(currentStage) {
         case INTRO:
             const rot_x = camera.getAttribute('rotation').x;
-            console.log(rot_x);
             if (rot_x > 85) {
                 currentStage = FLYING;
                 clearInterval(interval);
@@ -128,30 +127,37 @@ function nextStageChecker(timestamp) {
         case FLYING:
             if (!lastTimestamp) lastTimestamp = timestamp;
             const deltaSeconds = (timestamp - lastTimestamp) / 1000;
-            console.log(deltaSeconds);
             lastTimestamp = timestamp;
             const speed = -5;
             const pos = player.getAttribute('position');
             const org_rotation = player.object3D.rotation;
-            cam_rotation = camera.getAttribute('rotation');
-            if (angleWithinRange(cam_rotation.x, south, 5) {
-                flyingSouth(timestamp);
+            const cam_rotation = camera.getAttribute('rotation');
+            if (angleWithinRange(cam_rotation.x, south, 5)) {
+                startedflyingSouth(timestamp);
             } else {
                 stopedFlyingSouth();
             }
-            player.setAttribute('rotation', camera.getAttribute('rotation'));
+            player.setAttribute('rotation', cam_rotation);
             player.object3D.translateZ(deltaSeconds * speed);
             player.setAttribute('rotation', {x:0, y:0, z:0});
             requestAnimationFrame(nextStageChecker);
     }
 }
 
-startedFlyingSouth() {
-    console.log('started flying south');
+function startedFlyingSouth() {
+    if (flyingSouth === false) {
+        flyingSouth = true;
+        console.log('started flying south');
+    }
 }
 
-stopedFlyingSouth() {
-    console.log('stopped flying south');
+var flyingSouth = false;
+
+function stopedFlyingSouth() {
+    if (flyingSouth === true) {
+        flyingSouth = false;
+        console.log('stopped flying south');
+    }
 }
 
 var lastTimestamp = null;
