@@ -6,10 +6,10 @@
 <title>FlySouth</title>
 <script src="node_modules/aframe/dist/aframe-master.js"></script>
 <body class="a-body ">
-<a-scene class="fullscreen" canvas keyboard-shortcuts vr-mode-ui fog="type: exponential; color: #87CEFA; density: 0.002;">
+<a-scene class="fullscreen" canvas keyboard-shortcuts vr-mode-ui fog="type: exponential; color: #87CEFA; density: 0.02;">
     <a-assets>
         <a-plane id="street" material="color:#333;"></a-plane>
-        <a-box id="building" material="color:#333;"></a-box>
+        <a-box id="building" material="color:#a1b7dc; metalness:0.3;"></a-box>
     </a-assets>
 
     <a-entity id="world">
@@ -17,8 +17,9 @@
         <a-entity id="buildings"></a-entity>
     </a-entity>
 
-    <a-entity id="camera" position="0 3 5" look-controls-enabled>
-        <a-camera far="10000"></a-camera>
+    <a-entity id="player" look-controls-enabled>
+        <a-camera id="camera" position="0 0 0" far="10000"></a-camera>
+        <a-animation id="player_animation" attribute="position"></a-animation>
     </a-entity>
 
     <a-plane color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0" material=""></a-plane>
@@ -31,6 +32,18 @@
 var streets = document.getElementById("streets");
 var buildings = document.getElementById("buildings");
 
+var player = document.getElementById('player');
+var player_animation = document.getElementById('player_animation');
+var camera = document.getElementById('camera');
+
+function setCamera(position, targetPosition, duration) {
+    player.setAttribute('position', position);
+    if (targetPosition && duration) {
+        player_animation.setAttribute('to', targetPosition);
+        player_animation.setAttribute('duration', duration);
+        lastPosition = targetPosition;
+    }
+}
 
 function createStreet([x1,y1], [x2,y2], width = 5) {
     const value_street = document.getElementById('street');
@@ -64,11 +77,64 @@ const addBuilding=building=>buildings.appendChild(building);
 
 for(let i = 0; i < 10; i++) {
     // Main roads
-    addStreet(createStreet([i * 100, 0], [i * 100,1000]));
-    addBuilding(createBuilding([i * 100 + 50, 50], 90, 90, Math.random() * 60 + 10));
-    addStreet(createStreet([0, i * 100], [1000,i * 100]));
-    addStreet(createStreet([i * 100+50, 0], [i * 100+50, 0], 4));
+    addStreet(createStreet([i * 50, 0], [i * 50,500], 6));
+    addStreet(createStreet([0, i * 50], [500,i * 50], 6));
+    // Service roads
+    addStreet(createStreet([i * 50+25, 0], [i * 50+25, 0], 4));
 }
+
+for(let x = 0; x < 10; x++) {
+    for(let y = 0; y < 10; y++) {
+        addBuilding(createBuilding([x * 50 + 25, y * 50 + 25], 40, 40, Math.random() * 60 + 10));
+    }
+}
+
+const INTRO = 0;
+const TAKEOFF = 1;
+const FLYING = 2;
+const LANDING = 3;
+const GROUND = 4;
+const EATING = 5; // Standing and eating
+const HEAVEN = 6;
+
+let currentStage = INTRO;
+let lastPosition = {x: 0, y: 0.3, z:0};
+let targetPosition = {x: 0, y: 0.3, z:0};
+
+setCamera(lastPosition);
+
+
+function nextStageChecker() {
+    switch(currentStage) {
+        case INTRO:
+            const rot_x = camera.getAttribute('rotation').x;
+            //console.log(rot_x);
+            if (rot_x > 85) {
+                currentStage = FLYING;
+            }
+            break;
+        case FLYING:
+            const speed = 2;
+            const pos = player.getAttribute('position');
+            const pos3 = new THREE.Vector3(pos.x, pos.y, pos.z);
+            //const deltaTime = 0.1;
+            //const deltaDistance = speed * deltaTime;
+            //const rotation = camera.getAttribute('rotation');
+            //const pitch = rotation.y;
+            //const yaw = rotation.z;
+            //const cos = Math.cos;
+            //const sin = Math.sin;
+            //const newPosition = {
+            //    x: lastPosition.x + (sin(pitch) * sin(yaw)) * deltaDistance,
+            //    y: lastPosition.y + (cos(pitch) * sin(yaw)) * deltaDistance,
+            //    z: lastPosition.z + (cos(yaw), cos(pitch)) * deltaDistance
+            //};
+            //setCamera(lastPosition, newPosition, 100);
+            break;
+    }
+}
+
+//setInterval(nextStageChecker, 100);
 
 // addStreet(createStreet([0,0], [40,0]));
 // addStreet(createStreet([20,0], [20,20]));
