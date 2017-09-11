@@ -115,12 +115,15 @@ function nextStageChecker() {
         case FLYING:
             const speed = 2;
             const pos = player.getAttribute('position');
-            const rot = camera.object3D.translateZ(-0.5);
+            const org_rotation = player.object3D.rotation;
+            player.setAttribute('rotation', camera.getAttribute('rotation'));
+            player.object3D.translateZ(-0.5);
+                        player.setAttribute('rotation', {x:0, y:0, z:0});
             break;
     }
 }
 
-setInterval(nextStageChecker, 100);
+setInterval(nextStageChecker, 50);
 
 // addStreet(createStreet([0,0], [40,0]));
 // addStreet(createStreet([20,0], [20,20]));
