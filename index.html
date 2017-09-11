@@ -18,8 +18,7 @@
     </a-entity>
 
     <a-entity id="player" look-controls-enabled>
-        <a-camera id="camera" position="0 0 0" far="10000"></a-camera>
-        <a-animation id="player_animation" attribute="position"></a-animation>
+        <a-camera id="camera" far="10000"></a-camera>
     </a-entity>
 
     <a-plane color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0" material=""></a-plane>
@@ -29,6 +28,7 @@
 </a-scene>
 <script>
 'use strict';
+
 var streets = document.getElementById("streets");
 var buildings = document.getElementById("buildings");
 
@@ -37,12 +37,12 @@ var player_animation = document.getElementById('player_animation');
 var camera = document.getElementById('camera');
 
 function setCamera(position, targetPosition, duration) {
-    player.setAttribute('position', position);
-    if (targetPosition && duration) {
-        player_animation.setAttribute('to', targetPosition);
-        player_animation.setAttribute('duration', duration);
-        lastPosition = targetPosition;
-    }
+    player.setAttribute('position', targetPosition);
+    //if (targetPosition && duration) {
+    //    player_animation.setAttribute('to', targetPosition);
+    //    player_animation.setAttribute('duration', duration);
+    //    lastPosition = targetPosition;
+    //}
 }
 
 function createStreet([x1,y1], [x2,y2], width = 5) {
@@ -88,7 +88,6 @@ for(let x = 0; x < 10; x++) {
         addBuilding(createBuilding([x * 50 + 25, y * 50 + 25], 40, 40, Math.random() * 60 + 10));
     }
 }
-
 const INTRO = 0;
 const TAKEOFF = 1;
 const FLYING = 2;
@@ -108,7 +107,7 @@ function nextStageChecker() {
     switch(currentStage) {
         case INTRO:
             const rot_x = camera.getAttribute('rotation').x;
-            //console.log(rot_x);
+            console.log(rot_x);
             if (rot_x > 85) {
                 currentStage = FLYING;
             }
@@ -116,25 +115,12 @@ function nextStageChecker() {
         case FLYING:
             const speed = 2;
             const pos = player.getAttribute('position');
-            const pos3 = new THREE.Vector3(pos.x, pos.y, pos.z);
-            //const deltaTime = 0.1;
-            //const deltaDistance = speed * deltaTime;
-            //const rotation = camera.getAttribute('rotation');
-            //const pitch = rotation.y;
-            //const yaw = rotation.z;
-            //const cos = Math.cos;
-            //const sin = Math.sin;
-            //const newPosition = {
-            //    x: lastPosition.x + (sin(pitch) * sin(yaw)) * deltaDistance,
-            //    y: lastPosition.y + (cos(pitch) * sin(yaw)) * deltaDistance,
-            //    z: lastPosition.z + (cos(yaw), cos(pitch)) * deltaDistance
-            //};
-            //setCamera(lastPosition, newPosition, 100);
+            const rot = camera.object3D.translateZ(-0.5);
             break;
     }
 }
 
-//setInterval(nextStageChecker, 100);
+setInterval(nextStageChecker, 100);
 
 // addStreet(createStreet([0,0], [40,0]));
 // addStreet(createStreet([20,0], [20,20]));
@@ -143,8 +129,6 @@ function nextStageChecker() {
 //
 // addStreet(createStreet([20,10], [0,0], 1));
 // addStreet(createStreet([0,0], [20,20], 2));
-
-
 
 </script>
 </body></html>
