@@ -6,7 +6,7 @@
 <title>FlySouth</title>
 <script src="node_modules/aframe/dist/aframe-master.js"></script>
 <body class="a-body ">
-<a-scene class="fullscreen" canvas keyboard-shortcuts vr-mode-ui fog="type: exponential; color: #87CEFA; density: 0.02;">
+<a-scene class="fullscreen" canvas vr-mode-ui fog="type: exponential; color: #87CEFA; density: 0.02;">
     <a-assets>
         <a-plane id="street" material="color:#333;"></a-plane>
         <a-box id="building" material="color:#a1b7dc; metalness:0.3;"></a-box>
@@ -21,7 +21,7 @@
         <a-camera id="camera" far="10000"></a-camera>
     </a-entity>
 
-    <a-plane color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0" material=""></a-plane>
+    <a-plane color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0"></a-plane>
     <a-sky material="shader: flat; color: #87CEFA;" geometry="primitive: sphere; radius: 5000; segmentsHeight: 20; segmentsWidth: 64"></a-sky>
     <a-light type="directional" color="#fff" intensity="0.2" position="-1 2 1" light=""></a-light>
     <a-light type="ambient" color="#fff" light=""></a-light>
@@ -29,12 +29,15 @@
 <script>
 'use strict';
 
+var scene = document.querySelector("a-scene");
 var streets = document.getElementById("streets");
 var buildings = document.getElementById("buildings");
 
 var player = document.getElementById('player');
 var player_animation = document.getElementById('player_animation');
 var camera = document.getElementById('camera');
+
+var south = Math.random() * 360;
 
 function setCamera(position, targetPosition, duration) {
     player.setAttribute('position', targetPosition);
@@ -102,28 +105,58 @@ let targetPosition = {x: 0, y: 0.3, z:0};
 
 setCamera(lastPosition);
 
+function angleWithinRange(actual, expected, variation) {
+    if (actual - variation > expected && actual - variation < expected) {
+        return true;
+    }
+    //TODO Wrap around 360° to 0° and 0° to 360°
+    return false;
+}
 
-function nextStageChecker() {
+function nextStageChecker(timestamp) {
     switch(currentStage) {
         case INTRO:
             const rot_x = camera.getAttribute('rotation').x;
             console.log(rot_x);
             if (rot_x > 85) {
                 currentStage = FLYING;
+                clearInterval(interval);
+                requestAnimationFrame(nextStageChecker);
+                scene.setAttribute('fog', {density:0.01});
             }
             break;
         case FLYING:
-            const speed = 2;
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const deltaSeconds = (timestamp - lastTimestamp) / 1000;
+            console.log(deltaSeconds);
+            lastTimestamp = timestamp;
+            const speed = -5;
             const pos = player.getAttribute('position');
             const org_rotation = player.object3D.rotation;
+            cam_rotation = camera.getAttribute('rotation');
+            if (angleWithinRange(cam_rotation.x, south, 5) {
+                flyingSouth(timestamp);
+            } else {
+                stopedFlyingSouth();
+            }
             player.setAttribute('rotation', camera.getAttribute('rotation'));
-            player.object3D.translateZ(-0.5);
-                        player.setAttribute('rotation', {x:0, y:0, z:0});
-            break;
+            player.object3D.translateZ(deltaSeconds * speed);
+            player.setAttribute('rotation', {x:0, y:0, z:0});
+            requestAnimationFrame(nextStageChecker);
     }
 }
 
-setInterval(nextStageChecker, 50);
+startedFlyingSouth() {
+    console.log('started flying south');
+}
+
+stopedFlyingSouth() {
+    console.log('stopped flying south');
+}
+
+var lastTimestamp = null;
+
+var interval = setInterval(nextStageChecker, 50);
 
 // addStreet(createStreet([0,0], [40,0]));
 // addStreet(createStreet([20,0], [20,20]));
