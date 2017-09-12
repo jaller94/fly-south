@@ -17,7 +17,24 @@
         <a-entity id="buildings"></a-entity>
     </a-entity>
 
-    <a-entity id="player" look-controls-enabled>
+    <a-entity id="park 1" position="325 0.1 325">
+        <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
+        <a-circle color="#d9c4aa" position="0 0.1 0" geometry="primitive: circle; radius: 10" rotation="270 0 0"></a-circle>
+        <a-entity id="tree" position="3 0 4">
+            <a-box position="0 0.5 0" open-ended="true" material="color:#6B4226;"></a-box>
+            <a-cone id="tree" position="0 6 0" color="#143306" radius-bottom="2" height="10" segments-height="2" segments-radial="4"></a-cone>
+        </a-entity>
+        <a-entity id="tree" position="-3 0 -4">
+            <a-box position="0 2 0" open-ended="true" height="4" material="color:#6B4226;"></a-box>
+            <a-box position="0 6 0" open-ended="true" width="4" height="4" depth="4" material="color:#143306;"></a-box>
+        </a-entity>
+    </a-entity>
+
+    <a-entity id="park 2" position="325 0.1 275">
+        <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
+    </a-entity>
+
+    <a-entity id="player">
         <a-camera id="camera" far="10000"></a-camera>
         <a-entity id="map-wrapper">
             <a-text position="-0.3 0.4 0" rotation="-90 90 0" align="center" color="black" value="[Map]" wrap-count="7" width="1.6"></a-text>
@@ -118,16 +135,17 @@ const addStreet=street=>streets.appendChild(street);
 const addBuilding=building=>buildings.appendChild(building);
 
 
-for(let i = 0; i < 10; i++) {
+for(let i = 0; i < 11; i++) {
     // Main roads
     addStreet(createStreet([i * 50, 0], [i * 50,500], 6));
     addStreet(createStreet([0, i * 50], [500,i * 50], 6));
     // Service roads
-    addStreet(createStreet([i * 50+25, 0], [i * 50+25, 0], 4));
+    //addStreet(createStreet([i * 50+25, 0], [i * 50+25, 0], 4));
 }
 
 for(let x = 0; x < 10; x++) {
     for(let y = 0; y < 10; y++) {
+        if (x === 6 && (y === 5 || y === 6)) continue; // leave empty for the park
         addBuilding(createBuilding([x * 50 + 25, y * 50 + 25], 40, 40, Math.random() * 60 + 10));
     }
 }
@@ -140,10 +158,8 @@ const EATING = 5; // Standing and eating
 const HEAVEN = 6;
 
 let currentStage = INTRO;
-let lastPosition = {x: 0, y: 0.3, z:0};
-let targetPosition = {x: 0, y: 0.3, z:0};
 
-setCamera(lastPosition);
+setTimeout(() => player.object3D.position.set(300, 0, 300));
 
 function angleWithinRange(actual, expected, variation) {
     actual %= 360;
