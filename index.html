@@ -19,7 +19,43 @@
 
     <a-entity id="player" look-controls-enabled>
         <a-camera id="camera" far="10000"></a-camera>
+        <a-entity id="map-wrapper">
+            <a-text position="-0.3 0.4 0" rotation="-90 90 0" align="center" color="black" value="[Map]" wrap-count="7" width="1.6"></a-text>
+            <a-text position="0 0.4 0" rotation="-90 90 0" align="center" color="black" value="[Enabled in flight]" wrap-count="30"  width="1.6"></a-text>
+            <a-plane position="0 0.35 0" opacity="0.5" rotation="-90 90 0" width="1.7" height="1.7" color="#eee" value="--->"></a-plane>
+        </a-entity>
     </a-entity>
+
+    <a-entry id="intro-room">
+        <a-entry id="intro-1">
+            <a-text position="0 2 -3" align="center" color="black" value="You are a goose and it's getting cold."></a-text>
+            <a-text position="0 1.7 -3" opacity="0.5" align="center" color="black" value="Turn right --->"></a-text>
+        </a-entry>
+
+        <a-entry id="intro-2">
+            <a-text position="3 2 0" rotation="0 -90 0" align="center" color="black" value="The other geese left for south but you are still hungry."></a-text>
+            <a-text position="3 1.7 0" opacity="0.5" rotation="0 -90 0" align="center" color="black" value="--->"></a-text>
+        </a-entry>
+
+        <a-entry id="intro-3">
+            <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Use the map to find the park and then fly south."></a-text>
+            <a-text position="0 1.7 3" opacity="0.5" rotation="0 180 0" align="center" color="black" value="--->"></a-text>
+        </a-entry>
+
+        <a-entry id="intro-4">
+            <a-text position="-3 2 0" rotation="0 90 0" align="center" color="black" value="The map is underneath you."></a-text>
+            <a-text position="-3 1.7 0" opacity="0.5" rotation="0 90 -90" align="center" color="black" value="--->"></a-text>
+        </a-entry>
+
+        <a-entry id="intro-5">
+            <a-text position="-1.4 0.4 0" rotation="-50 90 0" align="center" color="black" value="Look up to take off."></a-text>
+            <!--<a-text position="1.4 0.4 0" rotation="-50 270 0" align="center" color="black" value="Look up to take off."></a-text>
+            <a-text position="0 0.4 -1.4" rotation="-50 0 0" align="center" color="black" value="Look up to take off."></a-text>
+            <a-text position="0 0.4 1.4" rotation="-50 180 0" align="center" color="black" value="Look up to take off."></a-text>-->
+        </a-entry>
+
+        <a-text position="-1.3 0.6 -1" opacity="0.5" rotation="0 70 90" align="center" color="black" value="----->"></a-text>
+    </a-entry>
 
     <a-plane color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0"></a-plane>
     <a-sky material="shader: flat; color: #87CEFA;" geometry="primitive: sphere; radius: 5000; segmentsHeight: 20; segmentsWidth: 64"></a-sky>
@@ -29,17 +65,19 @@
 <script>
 'use strict';
 
-var scene = document.querySelector("a-scene");
-var sky = document.querySelector("a-sky");
+var scene = document.querySelector('a-scene');
+var sky = document.querySelector('a-sky');
 
-var streets = document.getElementById("streets");
-var buildings = document.getElementById("buildings");
+var streets = document.getElementById('streets');
+var buildings = document.getElementById('buildings');
 
 var player = document.getElementById('player');
 var player_animation = document.getElementById('player_animation');
 var camera = document.getElementById('camera');
 
 var south = Math.random() * 360;
+
+var map_wrapper = document.getElementById('player');
 
 function setCamera(position, targetPosition, duration) {
     player.setAttribute('position', targetPosition);
@@ -141,45 +179,56 @@ function nextStageChecker(timestamp) {
             if (angleWithinRange(cam_rotation.y, south, 5)) {
                 startedFlyingSouth(timestamp);
             } else {
-                stopedFlyingSouth();
+                stoppedFlyingSouth();
             }
             player.setAttribute('rotation', cam_rotation);
             player.object3D.translateZ(deltaSeconds * speed);
             player.setAttribute('rotation', {x:0, y:0, z:0});
+            const player_position = camera.getAttribute('position');
+            if (player_position.y > 100) {
+                player_position.y = 100;
+            } else if (player_position.y < 0) {
+                die('ground');
+            }
             requestAnimationFrame(nextStageChecker);
     }
 }
+
+var flyingSouth = false;
+var flyingSouthTimeout = null;
+var flyingSouthSkyAnimation = null;
 
 function startedFlyingSouth() {
     if (flyingSouth === false) {
         flyingSouth = true;
         console.log('started flying south');
-        const sky_animation = document.createElement('a-animation');
-        sky_animation.setAttribute('attribute', 'fog.color');
-        sky_animation.setAttribute('dur', '10000');
-        sky_animation.setAttribute('from', '#87CEFA');
-        sky_animation.setAttribute('to', '#fd5e53');
-        scene.appendChild(sky_animation);
-        flyingSouthTimeout = setTimeout(winGame);
+        flyingSouthSkyAnimation = document.createElement('a-animation');
+        flyingSouthSkyAnimation.setAttribute('attribute', 'fog.color');
+        flyingSouthSkyAnimation.setAttribute('dur', '10000');
+        flyingSouthSkyAnimation.setAttribute('from', '#87CEFA');
+        flyingSouthSkyAnimation.setAttribute('to', '#fd5e53');
+        scene.appendChild(flyingSouthSkyAnimation);
+        flyingSouthTimeout = setTimeout(winGame, 10000);
+    }
+}
+
+function stoppedFlyingSouth() {
+    if (flyingSouth === true) {
+        flyingSouth = false;
+        console.log('stopped flying south');
+        while (flyingSouthSkyAnimation) {
+            scene.removeChild(flyingSouthSkyAnimation);
+            flyingSouthSkyAnimation = null;
+        }
+        if (!flyingSouthTimeout) {
+            clearInterval(flyingSouthTimeout);
+        }
     }
 }
 
 function winGame() {
     //TODO Do something to celebrate the win.
     console.log('You won the game!');
-}
-
-var flyingSouth = false;
-var flyingSouthTimeout = null;
-
-function stopedFlyingSouth() {
-    if (flyingSouth === true) {
-        flyingSouth = false;
-        console.log('stopped flying south');
-        while (sky.firstChild) {
-            sky.removeChild(sky.firstChild);
-        }
-    }
 }
 
 var lastTimestamp = null;
