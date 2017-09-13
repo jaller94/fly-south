@@ -11,7 +11,6 @@
         <a-plane id="street" material="color:#333;"></a-plane>
         <a-box id="building" material="color:#a1b7dc; metalness:0.3;"></a-box>
         <a-circle id="moon" position="3000 700 0" rotation="10 -90 0" geometry="radius: 250" material="shader: flat; color: #ddd; fog: false"></a-circle>
-    </a-assets>
 
     <a-entity id="level1">
         <a-entity id="streets" position="0 0.3 0"></a-entity>
@@ -68,7 +67,7 @@
             <a-entity id="park-1">
                 <a-text position="0 2 -3" align="center" color="black" value="Yummy! Breadcrumbs!"></a-text>
                 <a-text position="0 1.7 -3" align="center" color="black" value="Now take off to the cloud above you."></a-text>
-                <a-text position="0 1.4 -3" opacity="0.5" rotation="0 0 90" align="center" color="black" value="Turn right --->"></a-text>
+                <a-text position="0 1.4 -3" opacity="0.5" rotation="0 0 90" align="center" color="black" value="--->"></a-text>
             </a-entity>
 
             <a-entity id="park-2">
@@ -78,11 +77,28 @@
             </a-entity>
         </a-entity>
 
+        <a-entity id="portal-cloud" position="10000 -1000 0">
+            <a-sphere scale="10 4 10" opacity="0.4" material="shader: flat; color: #fff" transparent="true"></a-sphere>
+            <a-box scale="6 2 6" material="shader: flat; color: #001848"></a-box>
+        </a-entity>
+
         <a-light type="directional" color="#fff" intensity="0.2" position="-1 2 1" light=""></a-light>
         <a-light type="ambient" color="#fff" light=""></a-light>
         <a-plane id="ground" color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0"></a-plane>
         <a-sky material="shader: flat; color: #000" geometry="radius: 4000" segments-height="2" segments-width="4"></a-sky>
         <a-circle id="sun" position="200 1700 -200" rotation="85 -90 0" geometry="radius: 100" material="shader: flat; color: #fff; fog: false"></a-circle>
+    </a-entity>
+
+    <a-entity id="level2">
+        <a-entity id="clouds" rotation="0 45 0"></a-entity>
+
+        <a-sky material="shader: flat; color: #001848; fog: false" geometry="radius: 5000" segments-height="2" segments-width="4"></a-sky>
+        <a-light position="5 5 0" light="color: #fff; intensity: 1; type: directional"></a-light>
+    </a-entity>
+    </a-assets>
+
+    <a-entity id="world">
+
     </a-entity>
 
     <a-entity id="player">
@@ -116,8 +132,11 @@ var sky = document.querySelector('a-sky');
 var streets = document.getElementById('streets');
 var buildings = document.getElementById('buildings');
 var clouds = document.getElementById('clouds');
+var cloudPortal = document.getElementById('clouds');
 
 var intro = document.getElementById('intro-room');
+var parkRoom = document.getElementById('park-room');
+var portalCloud = document.getElementById('cloud-portal');
 
 // === player objects ===
 var player = document.getElementById('player');
@@ -129,6 +148,7 @@ var flyingBlocked = true;
 var portalActive = false;
 
 function startLevel1() { // City
+    world.appendChild(level1);
     currentStage = INTRO;
     flyingBlocked = true;
     setTimeout(() => flyingBlocked = false, 1000);
@@ -165,6 +185,8 @@ function startLevel1() { // City
 }
 
 function startLevel2() { // Clouds
+    world.removeChild(level1);
+    world.appendChild(level2);
     player.object3D.position.set(x, 0, z);
 
     clearChildren(streets);
@@ -265,7 +287,7 @@ function flyingingLoop(timestamp) {
     const deltaSeconds = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp;
     const speed = -5;
-    const pos = player.getAttribute('position');
+    let pos = player.getAttribute('position');
     const org_rotation = player.object3D.rotation;
     const cam_rotation = camera.getAttribute('rotation');
 
@@ -273,12 +295,18 @@ function flyingingLoop(timestamp) {
     player.object3D.translateZ(deltaSeconds * speed);
     player.setAttribute('rotation', {x:0, y:0, z:0});
 
-    const player_pos = player.object3D.position;
-    if (player_pos.y < GOOSE_HEIGHT) {
-        player.object3D.position.set(player_pos.x, GOOSE_HEIGHT, player_pos.z);
+    pos = player.object3D.position;
+    if (pos.y < GOOSE_HEIGHT) {
+        player.object3D.position.set(pos.x, GOOSE_HEIGHT, pos.z);
         continueStanding();
         scene.setAttribute('fog', {density:0.02});
         return;
+    } else if (portalActive) {
+        if ((pos.x > 347 && pos.x < 353) &&
+            (pos.y > 59 && pos.y < 61) &&
+            (pos.z > 323 && pos.z < 328)) {
+            startLevel2();
+        }
     }
     continueFlying();
 }
