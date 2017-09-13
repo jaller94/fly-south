@@ -231,12 +231,13 @@ const FLYING = 2;
 function continueStanding() {
     if (lastTimestamp) {
         lastTimestamp = null;
-        // Am I in the park to eat?
 
+        // Am I in the park to eat?
         const pos = player.object3D.position;
-        if (pos.x > 300 pos.x < 400 || ) {
+        if (pos.x > 310 && pos.x < 390 && pos.z > 310 && pos.z < 340) {
             parkRoom.setAttribute('position', pos);
-            portalA
+            portalActive = true;
+            portalCloud.setAttribute('position', {x: 350, y: 60, z: 325})
         }
     }
     setTimeout(standingLoop, 100);
@@ -247,9 +248,7 @@ function continueFlying() {
 }
 
 function standingLoop() {
-    console.log('Standing');
     if (!flyingBlocked) {
-        console.log('Ready');
         const rot_x = camera.getAttribute('rotation').x;
         if (rot_x > 85) {
             currentStage = FLYING;
