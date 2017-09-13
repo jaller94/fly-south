@@ -107,6 +107,7 @@ const BLOCKS = 10;
 const BLOCKSIZE = 50;
 const BLG_MIN_HEIGHT = 10;
 const BLG_MAX_HEIGHT = 60;
+const GOOSE_HEIGHT = 0.4;
 
 // === scene wrappers ===
 var scene = document.querySelector('a-scene');
@@ -136,7 +137,7 @@ function startLevel1() { // City
     const startCrossing = {x: randomInt(1, 10), y: randomInt(1, 10) };
     const x = startCrossing.x * BLOCKSIZE;
     const z = startCrossing.y * BLOCKSIZE;
-    player.object3D.position.set(x, 0.4, z);
+    player.object3D.position.set(x, GOOSE_HEIGHT, z);
     intro.setAttribute('position', {x, y:0, z});
 
     clearChildren(streets);
@@ -191,8 +192,8 @@ function startLevel2() { // Clouds
     }
 }
 
-function startLevel3() { // Clouds
-    player.object3D.position.set(x, 0, z);
+function startLevel3() { // Beach in the south (not implemented)
+    player.object3D.position.set(x, GOOSE_HEIGHT, z);
 }
 
 function createStreet([x1,y1], [x2,y2], width = 5) {
@@ -223,7 +224,6 @@ function createBuilding([x1,y1], width, length, height) {
 
 const addStreet=street=>streets.appendChild(street);
 const addBuilding=building=>buildings.appendChild(building);
-
 
 const INTRO = 0;
 const FLYING = 2;
@@ -273,9 +273,9 @@ function flyingingLoop(timestamp) {
     player.object3D.translateZ(deltaSeconds * speed);
     player.setAttribute('rotation', {x:0, y:0, z:0});
 
-    const player_position = player.object3D.position;
-    if (player_position.y < 0.4) {
-        player.object3D.position.set(player_position.x, 0.4, player_position.z);
+    const player_pos = player.object3D.position;
+    if (player_pos.y < GOOSE_HEIGHT) {
+        player.object3D.position.set(player_pos.x, GOOSE_HEIGHT, player_pos.z);
         continueStanding();
         scene.setAttribute('fog', {density:0.02});
         return;
@@ -285,15 +285,7 @@ function flyingingLoop(timestamp) {
 
 var lastTimestamp = null;
 
+// Starts the game
 setTimeout(() => startLevel1());
-
-// addStreet(createStreet([0,0], [40,0]));
-// addStreet(createStreet([20,0], [20,20]));
-// addStreet(createStreet([20,20], [0,20]));
-// addStreet(createStreet([0,20], [0,0]));
-//
-// addStreet(createStreet([20,10], [0,0], 1));
-// addStreet(createStreet([0,0], [20,20], 2));
-
 </script>
 </body></html>
