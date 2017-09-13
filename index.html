@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="origin-trial">
-<title>FlySouth</title>
+<title>Fly South</title>
 <script src="node_modules/aframe/dist/aframe-master.js"></script>
 <body class="a-body ">
 <a-scene class="fullscreen" canvas vr-mode-ui fog="type: exponential; color: #87CEFA; density: 0.02;">
@@ -14,10 +14,10 @@
     </a-assets>
 
     <a-entity id="level1">
-        <a-entity id="streets"></a-entity>
+        <a-entity id="streets" position="0 0.3 0"></a-entity>
         <a-entity id="buildings"></a-entity>
 
-        <a-entity id="park 1" position="325 0.1 325">
+        <a-entity id="park 1" position="325 0.3 325">
             <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
             <a-circle color="#d9c4aa" position="0 0.1 0" geometry="primitive: circle; radius: 10" rotation="270 0 0"></a-circle>
             <a-entity position="7 0 9">
@@ -30,7 +30,7 @@
             </a-entity>
         </a-entity>
 
-        <a-entity id="park 2" position="325 0.1 275">
+        <a-entity id="park 2" position="325 0.3 275">
             <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
             <a-entity position="-10 0 -18">
                 <a-box position="0 2 0" open-ended="true" height="4" material="color:#6B4226;"></a-box>
@@ -64,15 +64,17 @@
             </a-entity>
         </a-entity>
 
-        <a-entity id="park-room">
+        <a-entity id="park-room" position="10000 -1000 0">
             <a-entity id="park-1">
-                <a-text position="0 2 -3" align="center" color="black" value="Now take off to the cloud above you."></a-text>
-                <a-text position="0 1.7 -3" opacity="0.5" rotation="0 0 90" align="center" color="black" value="Turn right --->"></a-text>
+                <a-text position="0 2 -3" align="center" color="black" value="Yummy! Breadcrumbs!"></a-text>
+                <a-text position="0 1.7 -3" align="center" color="black" value="Now take off to the cloud above you."></a-text>
+                <a-text position="0 1.4 -3" opacity="0.5" rotation="0 0 90" align="center" color="black" value="Turn right --->"></a-text>
             </a-entity>
 
             <a-entity id="park-2">
-                <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Now take off to the cloud above you."></a-text>
-                <a-text position="0 1.7 3" opacity="0.5" rotation="0 180 90" align="center" color="black" value="--->"></a-text>
+                <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Yummy! Breadcrumbs!"></a-text>
+                <a-text position="0 1.7 3" rotation="0 180 0" align="center" color="black" value="Now take off to the cloud above you."></a-text>
+                <a-text position="0 1.4 3" opacity="0.5" rotation="0 180 90" align="center" color="black" value="--->"></a-text>
             </a-entity>
         </a-entity>
 
@@ -121,10 +123,9 @@ var player = document.getElementById('player');
 var player_animation = document.getElementById('player_animation');
 var camera = document.getElementById('camera');
 
-var south = 0;
 var currentStage;
 var flyingBlocked = true;
-var protalActive = false;
+var portalActive = false;
 
 function startLevel1() { // City
     currentStage = INTRO;
@@ -132,8 +133,6 @@ function startLevel1() { // City
     setTimeout(() => flyingBlocked = false, 1000);
     continueStanding();
 
-    // Determine south
-    south = Math.random() * 350 + 5;
     const startCrossing = {x: randomInt(1, 10), y: randomInt(1, 10) };
     const x = startCrossing.x * BLOCKSIZE;
     const z = startCrossing.y * BLOCKSIZE;
@@ -206,7 +205,7 @@ function createStreet([x1,y1], [x2,y2], width = 5) {
     const length = Math.hypot(deltaX, deltaY);
     newStreet.setAttribute('height', length);
     newStreet.setAttribute('width', width);
-    newStreet.setAttribute('position', {x:avrX, y:0.3, z:avrY});
+    newStreet.setAttribute('position', {x:avrX, y:0, z:avrY});
     const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
     newStreet.setAttribute('rotation', {x:270, y:0, z:angle+90});
     return newStreet;
@@ -227,29 +226,19 @@ const addBuilding=building=>buildings.appendChild(building);
 
 
 const INTRO = 0;
-const TAKEOFF = 1;
 const FLYING = 2;
-const LANDING = 3;
-const GROUND = 4;
-const EATING = 5; // Standing and eating
-const HEAVEN = 6;
-
-setTimeout(() => startLevel1());
-
-function angleWithinRange(actual, expected, variation) {
-    actual %= 360;
-    actual += 360;
-    actual %= 360;
-    console.log(actual, expected);
-    if (actual > expected - variation && actual < expected + variation) {
-        return true;
-    }
-    //TODO Wrap around 360° to 0° and 0° to 360°
-    return false;
-}
 
 function continueStanding() {
-    lastTimestamp = null;
+    if (lastTimestamp) {
+        lastTimestamp = null;
+        // Am I in the park to eat?
+
+        const pos = player.object3D.position;
+        if (pos.x > 300 pos.x < 400 || ) {
+            parkRoom.setAttribute('position', pos);
+            portalA
+        }
+    }
     setTimeout(standingLoop, 100);
 }
 
@@ -281,12 +270,6 @@ function flyingingLoop(timestamp) {
     const org_rotation = player.object3D.rotation;
     const cam_rotation = camera.getAttribute('rotation');
 
-    if (angleWithinRange(cam_rotation.y, south, 5)) {
-        startedFlyingSouth(timestamp);
-    } else {
-        stoppedFlyingSouth();
-    }
-
     player.setAttribute('rotation', cam_rotation);
     player.object3D.translateZ(deltaSeconds * speed);
     player.setAttribute('rotation', {x:0, y:0, z:0});
@@ -301,46 +284,9 @@ function flyingingLoop(timestamp) {
     continueFlying();
 }
 
-var flyingSouth = false;
-var flyingSouthTimeout = null;
-var flyingSouthSkyAnimation = null;
-
-function startedFlyingSouth() {
-    if (flyingSouth === false) {
-        flyingSouth = true;
-        console.log('started flying south');
-        flyingSouthSkyAnimation = document.createElement('a-animation');
-        flyingSouthSkyAnimation.setAttribute('attribute', 'fog.color');
-        flyingSouthSkyAnimation.setAttribute('dur', '10000');
-        flyingSouthSkyAnimation.setAttribute('from', '#87CEFA');
-        flyingSouthSkyAnimation.setAttribute('to', '#fd5e53');
-        scene.appendChild(flyingSouthSkyAnimation);
-        flyingSouthTimeout = setTimeout(winGame, 10000);
-    }
-}
-
-function stoppedFlyingSouth() {
-    if (flyingSouth === true) {
-        flyingSouth = false;
-        console.log('stopped flying south');
-        while (flyingSouthSkyAnimation) {
-            scene.removeChild(flyingSouthSkyAnimation);
-            flyingSouthSkyAnimation = null;
-        }
-        if (!flyingSouthTimeout) {
-            clearInterval(flyingSouthTimeout);
-        }
-    }
-}
-
-function winGame() {
-    //TODO Do something to celebrate the win.
-    console.log('You won the game!');
-}
-
 var lastTimestamp = null;
 
-
+setTimeout(() => startLevel1());
 
 // addStreet(createStreet([0,0], [40,0]));
 // addStreet(createStreet([20,0], [20,20]));
