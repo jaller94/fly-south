@@ -10,62 +10,82 @@
     <a-assets>
         <a-plane id="street" material="color:#333;"></a-plane>
         <a-box id="building" material="color:#a1b7dc; metalness:0.3;"></a-box>
+        <a-circle id="moon" position="3000 700 0" rotation="10 -90 0" geometry="radius: 250" material="shader: flat; color: #ddd; fog: false"></a-circle>
     </a-assets>
 
-    <a-entity id="world">
+    <a-entity id="level1">
         <a-entity id="streets"></a-entity>
         <a-entity id="buildings"></a-entity>
-    </a-entity>
 
-    <a-entity id="park 1" position="325 0.1 325">
-        <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
-        <a-circle color="#d9c4aa" position="0 0.1 0" geometry="primitive: circle; radius: 10" rotation="270 0 0"></a-circle>
-        <a-entity id="tree" position="3 0 4">
-            <a-box position="0 0.5 0" open-ended="true" material="color:#6B4226;"></a-box>
-            <a-cone id="tree" position="0 6 0" color="#143306" radius-bottom="2" height="10" segments-height="2" segments-radial="4"></a-cone>
+        <a-entity id="park 1" position="325 0.1 325">
+            <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
+            <a-circle color="#d9c4aa" position="0 0.1 0" geometry="primitive: circle; radius: 10" rotation="270 0 0"></a-circle>
+            <a-entity position="7 0 9">
+                <a-box position="0 0.5 0" open-ended="true" material="color:#6B4226;"></a-box>
+                <a-cone id="tree" position="0 6 0" color="#143306" radius-bottom="2" height="10" segments-height="2" segments-radial="4"></a-cone>
+            </a-entity>
+            <a-entity position="-4 0 -20">
+                <a-box position="0 2 0" open-ended="true" height="4" material="color:#6B4226;"></a-box>
+                <a-box position="0 6 0" open-ended="true" width="4" height="4" depth="4" material="color:#143306;"></a-box>
+            </a-entity>
         </a-entity>
-        <a-entity id="tree" position="-3 0 -4">
-            <a-box position="0 2 0" open-ended="true" height="4" material="color:#6B4226;"></a-box>
-            <a-box position="0 6 0" open-ended="true" width="4" height="4" depth="4" material="color:#143306;"></a-box>
-        </a-entity>
-    </a-entity>
 
-    <a-entity id="park 2" position="325 0.1 275">
-        <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
+        <a-entity id="park 2" position="325 0.1 275">
+            <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 45; width: 45" rotation="270 0 0"></a-plane>
+            <a-entity position="-10 0 -18">
+                <a-box position="0 2 0" open-ended="true" height="4" material="color:#6B4226;"></a-box>
+                <a-box position="0 6 0" open-ended="true" width="4" height="4" depth="4" material="color:#143306;"></a-box>
+            </a-entity>
+            <a-entity position="5 0 10">
+                <a-box position="0 2 0" open-ended="true" height="4" material="color:#6B4226;"></a-box>
+                <a-box position="0 6 0" open-ended="true" width="4" height="4" depth="4" material="color:#143306;"></a-box>
+            </a-entity>
+        </a-entity>
+
+        <a-entity id="intro-room">
+            <a-entity id="intro-1">
+                <a-text position="0 2 -3" align="center" color="black" value="You are a goose and it's getting cold."></a-text>
+                <a-text position="0 1.7 -3" opacity="0.5" align="center" color="black" value="Turn right --->"></a-text>
+            </a-entity>
+
+            <a-entity id="intro-2">
+                <a-text position="3 2 0" rotation="0 -90 0" align="center" color="black" value="The other geese left for south but you are still hungry."></a-text>
+                <a-text position="3 1.7 0" opacity="0.5" rotation="0 -90 0" align="center" color="black" value="--->"></a-text>
+            </a-entity>
+
+            <a-entity id="intro-3">
+                <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Find the central park and land."></a-text>
+                <a-text position="0 1.7 3" opacity="0.5" rotation="0 180 0" align="center" color="black" value="--->"></a-text>
+            </a-entity>
+
+            <a-entity id="intro-4">
+                <a-text position="-3 2 0" rotation="0 90 0" align="center" color="black" value="Look up to take off."></a-text>
+                <a-text position="-3 1.7 0" opacity="0.5" rotation="0 90 90" align="center" color="black" value="--->"></a-text>
+            </a-entity>
+        </a-entity>
+
+        <a-entity id="park-room">
+            <a-entity id="park-1">
+                <a-text position="0 2 -3" align="center" color="black" value="Now take off to the cloud above you."></a-text>
+                <a-text position="0 1.7 -3" opacity="0.5" rotation="0 0 90" align="center" color="black" value="Turn right --->"></a-text>
+            </a-entity>
+
+            <a-entity id="park-2">
+                <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Now take off to the cloud above you."></a-text>
+                <a-text position="0 1.7 3" opacity="0.5" rotation="0 180 90" align="center" color="black" value="--->"></a-text>
+            </a-entity>
+        </a-entity>
+
+        <a-light type="directional" color="#fff" intensity="0.2" position="-1 2 1" light=""></a-light>
+        <a-light type="ambient" color="#fff" light=""></a-light>
+        <a-plane id="ground" color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0"></a-plane>
+        <a-sky material="shader: flat; color: #000" geometry="radius: 4000" segments-height="2" segments-width="4"></a-sky>
+        <a-circle id="sun" position="200 1700 -200" rotation="85 -90 0" geometry="radius: 100" material="shader: flat; color: #fff; fog: false"></a-circle>
     </a-entity>
 
     <a-entity id="player">
         <a-camera id="camera" far="10000"></a-camera>
     </a-entity>
-
-    <a-entity id="intro-room">
-        <a-entity id="intro-1">
-            <a-text position="0 2 -3" align="center" color="black" value="You are a goose and it's getting cold."></a-text>
-            <a-text position="0 1.7 -3" opacity="0.5" align="center" color="black" value="Turn right --->"></a-text>
-        </a-entity>
-
-        <a-entity id="intro-2">
-            <a-text position="3 2 0" rotation="0 -90 0" align="center" color="black" value="The other geese left for south but you are still hungry."></a-text>
-            <a-text position="3 1.7 0" opacity="0.5" rotation="0 -90 0" align="center" color="black" value="--->"></a-text>
-        </a-entity>
-
-        <a-entity id="intro-3">
-            <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Find the nearby park to eat."></a-text>
-            <a-text position="0 1.7 3" opacity="0.5" rotation="0 180 0" align="center" color="black" value="--->"></a-text>
-        </a-entity>
-
-        <a-entity id="intro-4">
-            <a-text position="-3 2 0" rotation="0 90 0" align="center" color="black" value="Look up to take off."></a-text>
-            <a-text position="-3 1.7 0" opacity="0.5" rotation="0 90 90" align="center" color="black" value="--->"></a-text>
-        </a-entity>
-
-        <a-text position="-1.3 0.6 -1" opacity="0.5" rotation="0 70 90" align="center" color="black" value="----->"></a-text>
-    </a-entity>
-
-    <a-plane id="ground" color="#ccf" position="0 -0.1 0" geometry="primitive: plane; height: 5000; width: 5000" rotation="270 0 0"></a-plane>
-    <a-sky material="shader: flat; color: #000" geometry="radius: 4000" segments-height="2" segments-width="4"></a-sky>
-    <a-light type="directional" color="#fff" intensity="0.2" position="-1 2 1" light=""></a-light>
-    <a-light type="ambient" color="#fff" light=""></a-light>
 </a-scene>
 <script>
 'use strict';
@@ -92,6 +112,7 @@ var ground = document.getElementById('ground');
 var sky = document.querySelector('a-sky');
 var streets = document.getElementById('streets');
 var buildings = document.getElementById('buildings');
+var clouds = document.getElementById('clouds');
 
 var intro = document.getElementById('intro-room');
 
@@ -102,9 +123,13 @@ var camera = document.getElementById('camera');
 
 var south = 0;
 var currentStage;
+var flyingBlocked = true;
+var protalActive = false;
 
 function startLevel1() { // City
     currentStage = INTRO;
+    flyingBlocked = true;
+    setTimeout(() => flyingBlocked = false, 1000);
     continueStanding();
 
     // Determine south
@@ -113,6 +138,7 @@ function startLevel1() { // City
     const x = startCrossing.x * BLOCKSIZE;
     const z = startCrossing.y * BLOCKSIZE;
     player.object3D.position.set(x, 0.4, z);
+    intro.setAttribute('position', {x, y:0, z});
 
     clearChildren(streets);
     clearChildren(buildings);
@@ -143,6 +169,27 @@ function startLevel2() { // Clouds
 
     clearChildren(streets);
     clearChildren(buildings);
+
+    for(let i = 0; i < 100; i++) {
+        const asset_cloud = document.getElementById('cloud');
+        const cloud = asset_cloud.cloneNode(true);
+        cloud.setAttribute('position', {
+            x: Math.random() * 200,
+            y: Math.random() * 2,
+            z: Math.random() * 80,
+        });
+        cloud.setAttribute('rotation', {
+            x: Math.random() * 20,
+            y: Math.random() * 360,
+            z: 0,
+        });
+        cloud.setAttribute('scale', {
+            x: Math.random() * 20 + 2,
+            y: Math.random() * 2 + 1,
+            z: Math.random() * 20 + 2,
+        });
+        clouds.appendChild(cloud);
+    }
 }
 
 function startLevel3() { // Clouds
@@ -202,6 +249,7 @@ function angleWithinRange(actual, expected, variation) {
 }
 
 function continueStanding() {
+    lastTimestamp = null;
     setTimeout(standingLoop, 100);
 }
 
@@ -210,17 +258,18 @@ function continueFlying() {
 }
 
 function standingLoop() {
-    switch(currentStage) {
-        case INTRO:
-            const rot_x = camera.getAttribute('rotation').x;
-            if (rot_x > 85) {
-                currentStage = FLYING;
-                clearInterval(standingInterval);
-                requestAnimationFrame(nextStageChecker);
-                scene.setAttribute('fog', {density:0.01});
-            }
-            break;
+    console.log('Standing');
+    if (!flyingBlocked) {
+        console.log('Ready');
+        const rot_x = camera.getAttribute('rotation').x;
+        if (rot_x > 85) {
+            currentStage = FLYING;
+            continueFlying();
+            scene.setAttribute('fog', {density:0.01});
+            return;
+        }
     }
+    continueStanding();
 }
 
 function flyingingLoop(timestamp) {
@@ -242,13 +291,14 @@ function flyingingLoop(timestamp) {
     player.object3D.translateZ(deltaSeconds * speed);
     player.setAttribute('rotation', {x:0, y:0, z:0});
 
-    const player_position = camera.getAttribute('position');
-    if (player_position.y > 100) {
-        player_position.y = 100;
-    } else if (player_position.y < 0) {
-        die('ground');
+    const player_position = player.object3D.position;
+    if (player_position.y < 0.4) {
+        player.object3D.position.set(player_position.x, 0.4, player_position.z);
+        continueStanding();
+        scene.setAttribute('fog', {density:0.02});
+        return;
     }
-    requestAnimationFrame(nextStageChecker);
+    continueFlying();
 }
 
 var flyingSouth = false;
