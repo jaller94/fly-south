@@ -1,6 +1,6 @@
 {
   "name": "fly-south",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "index.html",
   "scripts": {
@@ -9,9 +9,6 @@
   },
   "author": "Christian Paul",
   "license": "MIT",
-  "dependencies": {
-    "aframe": "^0.6.1"
-  },
   "devDependencies": {
     "eslint": "^4.6.1"
   }
