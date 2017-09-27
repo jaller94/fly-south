@@ -19,7 +19,6 @@
 
         <a-entity id="park 1" position="325 0.3 325">
             <a-plane color="#2cb037" position="0 0 0" geometry="primitive: plane; height: 44; width: 44" rotation="270 0 0"></a-plane>
-            <a-circle color="#d9c4aa" position="0 0.1 0" geometry="primitive: circle; radius: 10" rotation="270 0 0"></a-circle>
             <a-entity position="7 0 9">
                 <a-box position="0 0.5 0" open-ended="true" material="color:#6B4226;"></a-box>
                 <a-cone id="tree" position="0 6 0" color="#143306" radius-bottom="2" height="10" segments-height="2" segments-radial="4"></a-cone>
@@ -66,13 +65,13 @@
 
         <a-entity id="park-room" visible="false">
             <a-entity id="park-1">
-                <a-text position="0 2 -3" align="center" color="black" value="Yummy! Breadcrumbs!"></a-text>
+                <a-text position="0 2 -3" align="center" color="black" value="Yummy! Fresh grass!"></a-text>
                 <a-text position="0 1.7 -3" align="center" color="black" value="Now take off to the cloud above you."></a-text>
                 <a-text position="0 1.4 -3" opacity="0.5" rotation="0 0 90" align="center" color="black" value="--->"></a-text>
             </a-entity>
 
             <a-entity id="park-2">
-                <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Yummy! Breadcrumbs!"></a-text>
+                <a-text position="0 2 3" rotation="0 180 0" align="center" color="black" value="Yummy! Fresh grass!"></a-text>
                 <a-text position="0 1.7 3" rotation="0 180 0" align="center" color="black" value="Now take off to the cloud above you."></a-text>
                 <a-text position="0 1.4 3" opacity="0.5" rotation="0 180 90" align="center" color="black" value="--->"></a-text>
             </a-entity>
@@ -122,7 +121,7 @@ function clearChildren(parent) {
 }
 
 // Settings
-const BLOCKS = 6;
+const BLOCKS = 10;
 const BLOCKSIZE = 50;
 const BLG_MIN_HEIGHT = 10;
 const BLG_MAX_HEIGHT = 60;
@@ -269,7 +268,7 @@ function continueStanding() {
 
         // Am I in the park to eat?
         const pos = player.object3D.position;
-        if (pos.x > 310 && pos.x < 390 && pos.z > 310 && pos.z < 340) {
+        if (pos.x > 305 && pos.x < 395 && pos.z > 305 && pos.z < 345) {
             parkRoom.setAttribute('position', pos);
             parkRoom.setAttribute('visible', 'true');
             portalActive = true;
@@ -301,7 +300,7 @@ function flyingingLoop(timestamp) {
     if (!lastTimestamp) lastTimestamp = timestamp;
     const deltaSeconds = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp;
-    const speed = -15;
+    const speed = -5;
     let pos = player.getAttribute('position');
     const org_rotation = player.object3D.rotation;
     const cam_rotation = camera.getAttribute('rotation');
@@ -327,6 +326,6 @@ function flyingingLoop(timestamp) {
 }
 
 // Starts the game
-setTimeout(() => startLevel2());
+setTimeout(() => startLevel1());
 </script>
 </body></html>

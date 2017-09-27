@@ -1,9 +1,20 @@
 # Fly south
-You're a goose in a big city. While the others left, you're still looking for the park with breadcrumbs.
+You're a goose in a big city. While the others left, you're still looking for yummy grass in the park.
 
 Game entry for [js13kGames](http://js13kgames.com/aframe) built using [A-Frame](https://aframe.io/).
 
+**Do not feed geese bread!**
+
+The submitted version of my game includes the text "Yummy! Breadcrumbs!". However, feeding bread is bad! Sorry for not doing this research before.
+
 ## Changelog
+#### 2017-09-27 (0.1.2)
+- Start with city level instead of cloud level
+- Reduce flying speed
+- The town has now 10x10 buildings.
+- The goose is now looking for fresh grass
+- The landing zone in the park is wider
+
 #### 2017-09-15 (0.1.1)
 - Fix JavaScript error from breaking the game when landing in the park
 - Fix spawning the portal to the second level
