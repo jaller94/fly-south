@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta http-equiv="origin-trial">
 <title>Fly South</title>
-<script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
-<body class="a-body ">
+<script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+<body>
 <a-scene class="fullscreen" canvas vr-mode-ui fog="type: exponential; color: #87CEFA; density: 0.02;">
     <a-assets id="assets">
         <a-plane id="street" material="color:#333;"></a-plane>
@@ -286,7 +286,7 @@ function continueFlying() {
 function standingLoop() {
     if (!flyingBlocked) {
         const rot_x = camera.getAttribute('rotation').x;
-        if (rot_x > 85) {
+        if (rot_x > 40) {
             currentStage = FLYING;
             continueFlying();
             scene.setAttribute('fog', {density:0.01});

@@ -8,6 +8,10 @@ Game entry for [js13kGames](http://js13kgames.com/aframe) built using [A-Frame](
 The submitted version of my game includes the text "Yummy! Breadcrumbs!". However, feeding bread is bad! Sorry for not doing this research before.
 
 ## Changelog
+#### 2018-03-06 (0.1.3)
+- Upgrade to A-Frame 0.7.1
+- Users don't need to look straight up to start flying
+
 #### 2017-09-27 (0.1.2)
 - Start with city level instead of cloud level
 - Reduce flying speed
