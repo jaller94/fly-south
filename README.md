@@ -1,4 +1,6 @@
 # Fly south
+Development moved to https://gitlab.com/jaller94/fly-south.
+
 You're a goose in a big city. While the others left, you're still looking for yummy grass in the park.
 
 Game entry for [js13kGames](http://js13kgames.com/aframe) built using [A-Frame](https://aframe.io/).
